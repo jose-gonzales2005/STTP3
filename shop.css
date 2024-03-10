@@ -12,6 +12,11 @@ div#shop {
     border: 5px solid red;
 }
 
+div.shopitem {
+    margin: 80px;
+    font-size: 25px;
+}
+
 
 div.shopitem :hover {
     border: 2px solid pink
