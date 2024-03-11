@@ -9,6 +9,7 @@ class Toad extends Phaser.Scene {
         this.load.image("torkey", "imgs/turkey.png")
         this.load.image("ponch", "imgs/fist.png")
         this.load.image("bigPonch", "imgs/beegArm.png")
+        this.load.image("gun", "imgs/gunSprite.png")
 
     }
 

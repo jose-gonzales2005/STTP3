@@ -12,24 +12,15 @@ class Shop extends Phaser.Scene {
         let playScene = this.scene.get('playScene')
         store.addListener('click')
         store.on('click', function (e) {
-            itemClicked(e.target, playScene)
+            if (!e.target.className.includes("disabled")) {
+                itemClicked(e.target, playScene, this)
+            }
+            
         })
 
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
 
-        this.shopMoveChain = this.tweens.chain({
-            targets: store,
-            loop: 0,
-            paused: false,
-            tweens: [
-                {
-                    x: w - 10000,
-                    //ease: "Bounce.easeOut",
-                    duration: 1,
-                    //angle: { from: 0, to: 90 },
-                },
-            ]
-        })
+        store.setX(2000)
         this.shopShowChain = this.tweens.chain({
             targets: store,
             loop: 0,
@@ -37,51 +28,64 @@ class Shop extends Phaser.Scene {
             tweens: [
                 {
                     x: centerX,
-                    duration: 100,
+                    duration: 1000,
                     ease: "Bounce.eastOut"
                 },
             ]
         })
+        this.shopHideChain = this.tweens.chain({
+            targets: store,
+            loop: 0,
+            paused: true,
+            tweens: [
+                {
+                    x: 2000,
+                    //ease: "Bounce.easeOut",
+                    duration: 1000,
+                },
+            ]
+        })
 
-        
     }
-
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
-            console.log(this.shopMoveChain)
-            this.shopMoveChain.restart()
+            console.log('shop go bye bye')
+            this.shopHideChain.restart()
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             console.log('shop opening')
             this.shopShowChain.restart()
 
-            
+
         }
         //xconsole.log(this.store.getElementById("shop"))
-        
+
     }
 
 }
 
-function itemClicked(item, playScene) {
+function itemClicked(item, playScene, storeScene) {
     /* Note for diff "disabled" classes, 
     one for purchased, and one for unavailable*/
     let itemId = item.id
-    if (itemId == 'back2Menu') {
-        //Shop.Scene.shopMoveChain.restart()
-    }
-    else if (itemId == 'itemBigHand' && playScene.torkeyFeathers >= 5) {
+    if (itemId == 'itemBigHand' && playScene.torkeyFeathers >= 15) {
         console.log('bighand clicked')
         playScene.bigHandPurchased()
         item.className = "disabled"
-    }
-    else if (itemId == "itemPowerFist") {
 
+    }
+    else if (itemId == "itemPowerFist" && playScene.torkeyFeathers >= 20) {
+        playScene.powerFistPurchased()
+        item.className = "disabled"
     }
     else if (itemId == "itemAutoPuncher") {
 
+    }
+    else if (itemId == "itemGun" && playScene.torkeyFeathers >= 50) {
+        playScene.gunPurchased()
+        item.className = "disabled"
     }
 }
 

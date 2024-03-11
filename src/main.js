@@ -16,11 +16,11 @@ let config = {
         createContainer: true,
     },
     //zoom: 4,
-    scene: [Toad, Menu, Shop, Play]
+    scene: [Toad, Menu, Shop, Play, Gojover]
 }
 
 let game = new Phaser.Game(config)
-let keyM, keyESC
+let keyM, keyESC, keySPACE
 
 let centerX = game.config.width / 2
 let centerY = game.config.height / 2

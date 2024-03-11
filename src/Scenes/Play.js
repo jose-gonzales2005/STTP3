@@ -15,7 +15,8 @@ class Play extends Phaser.Scene {
         this.torkeyFeatherIncrement = 1
 
         this.scoreDisplay = this.add.text(centerX - 400, 50, 'Torkey Feadders: ', {fontSize: '30px', color: '#FFFFFF'}).setOrigin(0.5).setTint(0xff00ff)
-        
+
+        this.ppBool = false         
 
         //timer setup
         //timer = game.time.create(false)
@@ -30,8 +31,12 @@ class Play extends Phaser.Scene {
         
         this.torkey.on('pointerdown', (pointer) => {
             this.torkeyFeathers += this.torkeyFeatherIncrement 
-            this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
             
+            if (this.powerFistUsed()) {
+                console.log("powerfist is true")
+                this.torkeyFeathers += this.torkeyFeatherIncrement + 10
+            }
+            this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
         })
      
 
@@ -42,27 +47,57 @@ class Play extends Phaser.Scene {
     update() {
         
         //itemClicked(back2Menu)
-
         this.totalTime += 1
         this.timeScore.setText(`Time: ${Math.round(this.totalTime / 100)} `)
 
-        
+        if (this.torkeyFeathers >= 75) {
+            this.scene.start("gojoverScene")
+            this.finalTime = this.totalTime
+            console.log("going to end")
+        }       
 
     }
 
 
     bigHandPurchased() {
         this.torkeyFeatherIncrement += 2
-        //this.fist.destroy(false, true)
+        this.fist.destroy()
         this.fist = new Fisticuff(this, centerX, centerY, 'bigPonch')
-        console.log("bigHandPurchased")
+        this.torkeyFeathers -= 10
+        this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
+
     }
 
     powerFistPurchased() {
-        
+        console.log("purchased")
+        this.ppBool = true
+        this.ppTime = Date.now()        
     }
 
-    
+    powerFistUsed() {
+        if (Date.now() - this.ppTime >= 5000 && this.ppBool) {
+            console.log(Date.now() - this.ppTime)
+            this.ppTime = Date.now()
+            return true
+        } else {
+            return false
+        }
+    }
+
+    autoPuncherPurchased() {
+        
+
+    }
+
+    gunPurchased() {
+        this.torkeyFeatherIncrement += 6
+        if (this.fist.active){ 
+            this.fist.destroy()
+        }
+        this.gun = new Fisticuff(this, centerX, centerY, 'gun')
+        this.torkeyFeathers -= 50
+        this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
+    }
     
     
 
