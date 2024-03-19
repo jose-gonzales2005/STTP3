@@ -6,7 +6,7 @@ class Menu extends Phaser.Scene {
     create() {
         //this.KEYS = this.scene.get('sceneKeys').KEYS
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-        let title02 = this.add.text(centerX, centerY + 100, 'TURKERY TIME WOOOO (PRESS SPACE TO GET STARTED IG)', 64).setOrigin(0.5).setTint(0xff00ff)
+        let title02 = this.add.text(centerX, centerY, 'TURKERY TIME WOOOO (PRESS SPACE TO GET STARTED IG) \n Punch(click) The Turkey and Collect 75 Feathers ASAP \n Buy upgrades using M to open the Shop ', 64).setOrigin(0.5).setTint(0xff00ff)
     }
 
     update() {

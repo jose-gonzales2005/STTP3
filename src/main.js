@@ -15,12 +15,21 @@ let config = {
     dom: {
         createContainer: true,
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            //debug: true,
+            gravity: {
+                y: 1000
+            }
+        },
+    },
     //zoom: 4,
     scene: [Toad, Menu, Shop, Play, Gojover]
 }
 
 let game = new Phaser.Game(config)
-let keyM, keyESC, keySPACE
+let keyM, keyESC, keySPACE, keyR 
 
 let centerX = game.config.width / 2
 let centerY = game.config.height / 2
