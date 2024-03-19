@@ -27,6 +27,11 @@ div#shop-right {
 
 }
 
+div.descript {
+    margin: auto;
+    font-size: 15px
+}
+
 div.shopitem {
     margin: 60px;
     font-size: 25px;

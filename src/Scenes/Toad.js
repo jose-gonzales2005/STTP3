@@ -11,6 +11,7 @@ class Toad extends Phaser.Scene {
         this.load.image("bigPonch", "imgs/beegArm.png")
         this.load.image("gun", "imgs/gunSprite.png")
         this.load.image('feadder', 'imgs/turkeyFeather.png')
+        this.load.image('title', "imgs/titleCard.png")
         this.load.audio('punch1', "audio/punch1.mp3")
         this.load.audio('punch2', "audio/punch2.mp3")
         this.load.audio('punch3', "audio/punch3.mp3")

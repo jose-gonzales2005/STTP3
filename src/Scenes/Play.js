@@ -17,6 +17,8 @@ class Play extends Phaser.Scene {
         this.torkey.body.setVelocityX(50)
         this.torkeyVelocityScale = 500
 
+        
+
         let torkeyTimer = this.time.addEvent({
             delay: 1000,    
             callback: this.torkeyMovement,
@@ -25,10 +27,12 @@ class Play extends Phaser.Scene {
         })
 
         this.fist = new Fisticuff(this, centerX, centerY, 'ponch')
+
         this.input.on('pointermove', (pointer) => {
             this.fist.x = pointer.x
             this.fist.y = pointer.y
         })
+    
         this.torkeyFeathers = 0
         this.torkeyFeatherIncrement = 1
 
@@ -57,7 +61,7 @@ class Play extends Phaser.Scene {
             y: 50,
             power: 40,       // strength of gravitational force (larger = stronger)
             epsilon: 100,   // min. distance for which gravitational force is calculated
-            gravity: 10,    // gravitational force of this well (creates "whipping" effect) [also try negatives!]
+            gravity: 30,    // gravitational force of this well (creates "whipping" effect) [also try negatives!]
         })
         this.movingEmitter.stop()
 
@@ -66,11 +70,9 @@ class Play extends Phaser.Scene {
 
         this.torkey.on('pointerdown', (pointer) => {
             this.torkeyFeathers += this.torkeyFeatherIncrement
-            console.log(this.torkeyFeatherIncrement)
-            console.log(this.torkeyFeathers)
             this.movingEmitter.start()
             let featherTimer = this.time.addEvent({
-                delay: 100,
+                delay: 50,
                 callback: this.stopFeadders,
                 //args: [],
                 callbackScope: this,
@@ -99,7 +101,7 @@ class Play extends Phaser.Scene {
             }
             this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
             this.torkey.torkeyHealth -= this.torkeyFeatherIncrement
-            console.log(this.torkey.torkeyHealth)
+            //console.log(this.torkey.torkeyHealth)
 
             this.movingEmitter.emitParticleAt(this.torkey.x, this.torkey.y)           
 
@@ -156,7 +158,6 @@ class Play extends Phaser.Scene {
         }
     }
 
-
     bigHandPurchased() {
         this.torkeyFeatherIncrement += 2
         this.fist.destroy()
@@ -205,12 +206,16 @@ class Play extends Phaser.Scene {
             this.torkeyFeatherIncrement += 6
         }
 
-        if (this.fist.active) {
-            this.fist.destroy()
-        }
+        //if (this.fist.active) {
+        this.fist.destroy()
         this.gun = new Fisticuff(this, centerX, centerY, 'gun')
         this.torkeyFeathers -= 50
         this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
+        this.gun.setScale(0.5)
+        this.input.on('pointermove', (pointer) => {
+            this.gun.x = pointer.x
+            this.gun.y = pointer.y
+        })
     }
 
 
