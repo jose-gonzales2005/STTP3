@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        this.add.image(centerX, centerY, 'background');
         this.torkey = this.physics.add.sprite(centerX, centerY, 'torkey').setInteractive()
         this.torkey.body.setCollideWorldBounds(true)
         this.torkey.body.setBounce (1)
@@ -134,7 +135,7 @@ class Play extends Phaser.Scene {
         //console.log(this.totalTime)
         this.timeScore.setText(`Time: ${Math.round(this.totalTime / 100)} `)
 
-        if (this.torkeyFeathers >= 75) {
+        if (this.torkeyFeathers >= 150) {
             this.scene.start("gojoverScene")
             this.finalTime = this.totalTime
             console.log("going to end")

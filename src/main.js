@@ -1,5 +1,10 @@
 // Created by Noah Dane
 // Super Turbo Turkey Puncher 3 Adaptation
+/* credit mentioned in the instruction scene as well
+Credit to: Nathan Altice, for moving particle emitter, gravity well, and particle death zone code
+Jack Morehart (friend) for significant assistance in setting up HTML Dom code for shop
+Credit to 
+*/
 
 'use strict'
 

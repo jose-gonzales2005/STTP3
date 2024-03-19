@@ -52,13 +52,13 @@ class Shop extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             console.log('shop go bye bye')
             this.shopHideChain.restart()
-            this.scene.setVisible(true, "playScene")
+            //this.scene.setVisible(true, "playScene")
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             console.log('shop opening')
             this.shopShowChain.restart()
-            this.scene.setVisible(false, "playScene")
+            //this.scene.setVisible(false, "playScene")
 
 
         }
