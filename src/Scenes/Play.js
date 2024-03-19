@@ -11,70 +11,117 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        this.torkey = new Torkey(this, centerX, centerY, 'torkey').setInteractive()
+        this.torkey = this.physics.add.sprite(centerX, centerY, 'torkey').setInteractive()
+        this.torkey.body.setCollideWorldBounds(true)
+        this.torkey.body.setBounce (1)
+        this.torkey.body.setVelocityX(50)
+        this.torkeyVelocityScale = 500
+
+        let torkeyTimer = this.time.addEvent({
+            delay: 1000,    
+            callback: this.torkeyMovement,
+            //args: [],
+            callbackScope: this,
+        })
+
         this.fist = new Fisticuff(this, centerX, centerY, 'ponch')
+        this.input.on('pointermove', (pointer) => {
+            this.fist.x = pointer.x
+            this.fist.y = pointer.y
+        })
         this.torkeyFeathers = 0
         this.torkeyFeatherIncrement = 1
 
-        this.scoreDisplay = this.add.text(centerX - 400, 50, 'Torkey Feadders: ', { fontSize: '30px', color: '#FFFFFF' }).setOrigin(0.5).setTint(0xff00ff)
+        this.scoreDisplay = this.add.text(centerX - 400, 50, 'Torkey Feathers: ', { fontSize: '30px', color: '#FFFFFF' }).setOrigin(0.5).setTint(0xff00ff)
 
         this.ppBool = false
 
-        let punchSounds = ["punch1", "punch2", "punch3"]
-
         this.totalTime = 0
         this.timeScore = this.add.text(w - 100, 50, 'TIME: ', { fontSize: '30px', color: '#FFFFFF' }).setOrigin(0.5).setTint(0xff00ff)
-        //this.timer.start()
 
-        //change score display and time spawn cords to work on diff screen types
-
-
-        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
-
-        this.torkey.on('pointerdown', (pointer) => {
-            this.torkeyFeathers += this.torkeyFeatherIncrement
-
-            let randomNoise = Math.floor(Math.random() * punchSounds.length);
-            //this.randomNoise.play()
-            console.log(randomNoise)
-
-            if (this.powerFistUsed()) {
-                console.log("powerfist is true")
-                this.torkeyFeathers += 10
-            }
-            this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
-            this.torkey.torkeyHealth -= this.torkeyFeatherIncrement
-            console.log(this.torkey.torkeyHealth)
-        })
-
-        // create an emitter
+        this.deathZone = new Phaser.Geom.Circle(centerX - 400, 50, 50)
         this.movingEmitter = this.add.particles(0, 0, 'feadder', {
             speed: 50,
-            scale: { start: 0.1, end: 1 },
-            alpha: { start: 1, end: 0 },
+            scale: { start: 0.3, end: 1 },
+            //alpha: { start: 1, end: 0 },
             // higher steps value = more time to go btwn min/max
-            lifespan: { min: 10, max: 7000, steps: 1000 }
+            lifespan: { min: 7000, max: 10000, steps: 10000 },
+            deathZone: {type: 'onEnter', source: this.deathZone},
         })
 
-        // note: setting the emitter's initial position to 0, 0 seems critical to get .startFollow to work
         this.movingEmitter.startFollow(this.torkey, 0, 0, false)
 
-        // create gravity well
         // "The force applied is inversely proportional to the square of the distance from the particle to the point, in accordance with Newton's law of gravity."
         this.movingEmitter.createGravityWell({
             x: centerX - 400,
             y: 50,
             power: 40,       // strength of gravitational force (larger = stronger)
             epsilon: 100,   // min. distance for which gravitational force is calculated
-            gravity: 100    // gravitational force of this well (creates "whipping" effect) [also try negatives!]
+            gravity: 10,    // gravitational force of this well (creates "whipping" effect) [also try negatives!]
         })
-
-        //this.input.on('pointerdown', (pointer) => {
-            //this.punch1.play()
-       //})
+        this.movingEmitter.stop()
 
 
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M)
+
+        this.torkey.on('pointerdown', (pointer) => {
+            this.torkeyFeathers += this.torkeyFeatherIncrement
+            console.log(this.torkeyFeatherIncrement)
+            console.log(this.torkeyFeathers)
+            this.movingEmitter.start()
+            let featherTimer = this.time.addEvent({
+                delay: 100,
+                callback: this.stopFeadders,
+                //args: [],
+                callbackScope: this,
+            })
+            
+
+            let randomNoise = Math.floor(Math.random() * 3)
+            if (randomNoise == 0) {
+                this.sound.play('punch1')
+            } else if (randomNoise == 1) {
+                this.sound.play('punch2')
+            } else {
+                this.sound.play("punch3")
+            }
+
+            if (Math.floor(Math.random() * 100) == 1) {
+                this.sound.play('squawk')
+            } else {
+                this.sound.play("torkeyNoise")
+            }
+
+
+            if (this.powerFistUsed()) {
+                //console.log("powerfist is true")
+                this.torkeyFeathers += 10
+            }
+            this.scoreDisplay.setText(`Torkey Feadders: ${this.torkeyFeathers} `)
+            this.torkey.torkeyHealth -= this.torkeyFeatherIncrement
+            console.log(this.torkey.torkeyHealth)
+
+            this.movingEmitter.emitParticleAt(this.torkey.x, this.torkey.y)           
+
+          
+            
+        })
         //ADD TWEEN FOR SCORE BEING ADDED, talk to nate or jimmy if need
+    }
+
+    torkeyMovement() {
+        let torkeyTimer = this.time.addEvent({
+            delay: Math.floor(Math.random() * 5000),  
+            callback: this.torkeyMovement,
+            //args: [],
+            callbackScope: this,
+        })
+        this.torkey.body.setVelocityX((Math.random() - 0.5) * this.torkeyVelocityScale)
+        this.torkey.body.setVelocityY((Math.random() - 0.5) * this.torkeyVelocityScale)
+    }
+
+    stopFeadders() {
+        this.movingEmitter.stop()
     }
 
     update() {
@@ -137,6 +184,17 @@ class Play extends Phaser.Scene {
 
     autoPuncherPurchased() {
 
+
+    }
+
+    tranquilizerPurchased() {
+        this.torkeyVelocityScale = 250
+        this.torkeyFeatherIncrement -= 0.5
+    }
+
+    steroidsPurchased() {
+        this.torkeyVelocityScale = 800
+        this.torkeyFeatherIncrement += 2
 
     }
 

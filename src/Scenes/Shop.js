@@ -76,7 +76,6 @@ function itemClicked(item, playScene, storeScene) {
         console.log('bighand clicked')
         playScene.bigHandPurchased()
         item.className = "disabled"
-
     }
     else if (itemId == "itemPowerFist" && playScene.torkeyFeathers >= 20) {
         playScene.powerFistPurchased()
@@ -84,6 +83,16 @@ function itemClicked(item, playScene, storeScene) {
     }
     else if (itemId == "itemAutoPuncher") {
 
+    }
+    else if (itemId == "itemTranquilizer" && playScene.torkeyFeathers >= 25) {
+        console.log("tranq bpought")
+        playScene.tranquilizerPurchased()
+        item.className = "disabled"
+    }
+    else if (itemId == "itemSteroids" && playScene.torkeyFeathers >= 25) {
+        console.log("roids bougth")
+        playScene.steroidsPurchased()
+        item.className = "disabled"
     }
     else if (itemId == "itemGun" && playScene.torkeyFeathers >= 50) {
         playScene.gunPurchased()
